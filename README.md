@@ -2,9 +2,9 @@
 
 > **See exactly where your Claude tokens go — and stop wasting them.**
 
-[![CI](https://github.com/sowmithkuppa/tokenwise/actions/workflows/ci.yml/badge.svg)](https://github.com/sowmithkuppa/tokenwise/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/sowmithkuppa/tokenwise/actions/workflows/codeql.yml/badge.svg)](https://github.com/sowmithkuppa/tokenwise/actions/workflows/codeql.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/sowmithkuppa/tokenwise/badge)](https://securityscorecards.dev/viewer/?uri=github.com/sowmithkuppa/tokenwise)
+[![CI](https://github.com/S0umith29/tokenwise/actions/workflows/ci.yml/badge.svg)](https://github.com/S0umith29/tokenwise/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/S0umith29/tokenwise/actions/workflows/codeql.yml/badge.svg)](https://github.com/S0umith29/tokenwise/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/S0umith29/tokenwise/badge)](https://securityscorecards.dev/viewer/?uri=github.com/S0umith29/tokenwise)
 [![PyPI](https://img.shields.io/pypi/v/tokenwise-cli)](https://pypi.org/project/tokenwise-cli/)
 [![Python](https://img.shields.io/pypi/pyversions/tokenwise-cli)](https://pypi.org/project/tokenwise-cli/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -92,7 +92,7 @@ python3 --version
 **Development setup** (for contributors):
 
 ```bash
-git clone https://github.com/sowmithkuppa/tokenwise.git
+git clone https://github.com/S0umith29/tokenwise.git
 cd tokenwise
 python3.13 -m venv .venv          # or python3.10 / 3.11 / 3.12
 source .venv/bin/activate
