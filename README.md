@@ -134,21 +134,6 @@ Parsed data is cached in `~/.tokenwise/cache.json` (permissions `0o600`) so repe
 
 ---
 
-## Comparison to `ccusage`
-
-| Feature | tokenwise | ccusage |
-|---|---|---|
-| Live dashboard | ✅ | ❌ |
-| Waste detection | ✅ | ❌ |
-| Cache-aware cost | ✅ | partial |
-| Per-session drill-down | ✅ | ✅ |
-| CSV export | ✅ | ✅ |
-| No API key required | ✅ | ✅ |
-| Formal threat model | ✅ | ❌ |
-| Runtime no-network assertion | ✅ | ❌ |
-
----
-
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).
