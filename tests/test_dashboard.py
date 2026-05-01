@@ -2,7 +2,6 @@
 
 from datetime import date, datetime
 
-import pytest
 from rich.panel import Panel
 from rich.table import Table
 
@@ -21,7 +20,6 @@ from tokenwise.dashboard import (
     build_summary_panel,
     build_waste_table,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers

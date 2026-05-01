@@ -8,7 +8,6 @@ from click.testing import CliRunner
 from tokenwise.analyzer import AnalysisResult, DailySummary, ProjectStats, SessionStats
 from tokenwise.cli import main
 
-
 # ---------------------------------------------------------------------------
 # Shared fixture: a minimal AnalysisResult that all commands can use
 # ---------------------------------------------------------------------------

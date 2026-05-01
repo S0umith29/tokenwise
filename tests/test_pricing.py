@@ -2,7 +2,7 @@
 
 import pytest
 
-from tokenwise.pricing import PRICES, ModelPrice, compute_cost, get_price
+from tokenwise.pricing import PRICES, compute_cost, get_price
 
 _MTok = 1_000_000
 

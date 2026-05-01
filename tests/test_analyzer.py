@@ -1,8 +1,6 @@
 """Tests for the analyzer module."""
 
-from datetime import date, datetime, timezone
-
-import pytest
+from datetime import date, datetime
 
 from tokenwise.analyzer import (
     AnalysisResult,
@@ -14,7 +12,6 @@ from tokenwise.analyzer import (
     top_wasteful_sessions,
 )
 from tokenwise.parser import AssistantTurn, Session, TokenUsage
-
 
 # ---------------------------------------------------------------------------
 # Helpers
