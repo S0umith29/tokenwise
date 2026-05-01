@@ -1,0 +1,102 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tokenwise-cli"
+version = "0.1.0"
+description = "Track and reduce your Claude/Anthropic API costs from the terminal"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    # click — CLI argument parsing and command routing. No web framework needed.
+    "click>=8.1,<9",
+    # rich — terminal rendering (tables, colors, live updates). No other TUI lib.
+    "rich>=13.7,<14",
+    # pydantic — typed data models for JSONL records and session aggregates.
+    "pydantic>=2.0,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0,<10",
+    "pytest-cov>=5.0,<6",
+    # bandit — static security linter; catches common Python security antipatterns.
+    "bandit>=1.7,<2",
+    # pip-audit — scans installed packages against the OSV vulnerability database.
+    "pip-audit>=2.7,<3",
+    # ruff — fast linter + formatter; replaces flake8/isort/pyupgrade in one tool.
+    "ruff>=0.4,<1",
+    # mypy — static type checker; catches interface mismatches before runtime.
+    "mypy>=1.10,<2",
+]
+
+[project.scripts]
+tokenwise = "tokenwise.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/sowmithkuppa/tokenwise"
+"Bug Tracker" = "https://github.com/sowmithkuppa/tokenwise/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tokenwise"]
+
+# ---------------------------------------------------------------------------
+# pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "--tb=short"
+
+# ---------------------------------------------------------------------------
+# ruff
+# ---------------------------------------------------------------------------
+[tool.ruff]
+src = ["src"]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "S",   # flake8-bandit (security)
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "S101",  # assert statements are fine in tests
+    "S603",  # subprocess without shell= is fine (we don't use subprocess at all)
+    "B008",  # do not perform function calls in argument defaults (click uses this)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+
+# ---------------------------------------------------------------------------
+# mypy
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.10"
+strict = false
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+mypy_path = "src"
+
+# ---------------------------------------------------------------------------
+# bandit
+# ---------------------------------------------------------------------------
+[tool.bandit]
+targets = ["src"]
+exclude_dirs = ["tests", ".venv313"]
+skips = [
+    "B101",  # assert_used — we use assert in security.py intentionally
+]

@@ -1,0 +1,48 @@
+# Virtual environments
+.venv/
+.venv*/
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+*.whl
+MANIFEST
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+
+# Ruff cache
+.ruff_cache/
+
+# Security / audit tools
+.bandit/
+
+# tokenwise local cache
+.tokenwise/
+
+# Environment files (never commit secrets)
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Compiled extensions
+*.so

@@ -1,0 +1,96 @@
+name: Release
+
+# Triggered when a version tag is pushed (e.g. v0.1.0).
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  # Required for OIDC Trusted Publishing — no API token needed in secrets.
+  id-token: write
+
+jobs:
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Build wheel and sdist
+        run: python -m build
+
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/tokenwise/
+
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # Trusted Publishing (OIDC) — no API token required.
+      #
+      # To configure on PyPI:
+      #   1. Go to https://pypi.org/manage/account/publishing/
+      #   2. Add a new "pending publisher" with:
+      #      - PyPI project name:  tokenwise
+      #      - Owner:              sowmithkuppa
+      #      - Repository:         tokenwise
+      #      - Workflow filename:  release.yml
+      #      - Environment name:   pypi
+      #   3. That's it — no secret tokens needed.
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No api_token needed — OIDC identity is exchanged automatically.
+
+  sign-sigstore:
+    name: Sign with Sigstore
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # to upload the signed artifacts to the GitHub release
+      id-token: write   # for Sigstore OIDC signing
+
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Sign artifacts with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v3
+        with:
+          inputs: dist/*.whl dist/*.tar.gz
+
+      - name: Upload signed artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+            dist/*.sigstore.json
