@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .security import ensure_cache_dir, safe_write_path, set_cache_file_permissions
+from .security import ensure_cache_dir, open_readonly, safe_write_path, set_cache_file_permissions
 
 CACHE_DIR = Path.home() / ".tokenwise"
 CACHE_FILE = CACHE_DIR / "cache.json"
@@ -14,10 +14,10 @@ def load_cache() -> dict[str, Any]:
     if not CACHE_FILE.exists():
         return {}
     try:
-        with open(CACHE_FILE, encoding="utf-8") as f:
+        with open_readonly(CACHE_FILE) as f:
             data: dict[str, Any] = json.load(f)
             return data
-    except (json.JSONDecodeError, OSError):
+    except (json.JSONDecodeError, OSError, ValueError):
         return {}
 
 

@@ -34,7 +34,7 @@ _FORBIDDEN_NETWORK_MODULES = frozenset(
 )
 
 # The only two directory trees tokenwise is allowed to read or write.
-_ALLOWED_READ_ROOTS = (Path.home() / ".claude" / "projects",)
+_ALLOWED_READ_ROOTS = (Path.home() / ".claude" / "projects", Path.home() / ".tokenwise")
 _ALLOWED_WRITE_ROOTS = (Path.home() / ".tokenwise",)
 
 
@@ -132,7 +132,7 @@ def _is_relative_to(child: Path, parent: Path) -> bool:
 
 def open_readonly(path: Path | str) -> IO[str]:
     """Open a file strictly read-only.  Never call this with a write mode."""
-    resolved = Path(path).resolve()
+    resolved = safe_read_path(path)  # enforces allowed-read-roots regardless of caller
     return open(resolved, encoding="utf-8")  # noqa: WPS515 — intentional
 
 

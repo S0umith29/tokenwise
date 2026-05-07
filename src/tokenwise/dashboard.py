@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta
 
 from rich import box
 from rich.console import Console
+from rich.markup import escape
 from rich.panel import Panel
 from rich.table import Table
 
@@ -86,7 +87,7 @@ def build_projects_table(result: AnalysisResult, top_n: int = 10) -> Table:
 
     for p in projects:
         table.add_row(
-            f"[bold]{p.project_name}[/bold]",
+            f"[bold]{escape(p.project_name)}[/bold]",
             str(p.sessions),
             _fmt_tokens(p.input_tokens),
             _fmt_tokens(p.output_tokens),
@@ -153,7 +154,7 @@ def build_waste_table(sessions: list[SessionStats], n: int = 10) -> Table:
         color = _HOT_COLOR if ratio > 100 else _WARN_COLOR if ratio > 30 else "white"
         date_str = s.start_time.strftime("%b %d") if s.start_time else "—"
         table.add_row(
-            s.project_name,
+            escape(s.project_name),
             date_str,
             _fmt_tokens(s.input_tokens + s.cache_read_tokens),
             _fmt_tokens(s.output_tokens),

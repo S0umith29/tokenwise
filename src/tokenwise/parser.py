@@ -116,10 +116,10 @@ def parse_session(jsonl_path: Path, project_slug: str) -> Session:
                 continue
 
             # Skip if all counts are zero
-            input_tok = raw_usage.get("input_tokens", 0) or 0
-            output_tok = raw_usage.get("output_tokens", 0) or 0
-            cache_create = raw_usage.get("cache_creation_input_tokens", 0) or 0
-            cache_read = raw_usage.get("cache_read_input_tokens", 0) or 0
+            input_tok = max(0, raw_usage.get("input_tokens", 0) or 0)
+            output_tok = max(0, raw_usage.get("output_tokens", 0) or 0)
+            cache_create = max(0, raw_usage.get("cache_creation_input_tokens", 0) or 0)
+            cache_read = max(0, raw_usage.get("cache_read_input_tokens", 0) or 0)
 
             if input_tok == output_tok == cache_create == cache_read == 0:
                 continue

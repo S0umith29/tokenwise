@@ -133,8 +133,10 @@ def test_safe_write_path_rejects_claude_dir(tmp_path, monkeypatch):
 # ---------------------------------------------------------------------------
 
 
-def test_open_readonly_returns_readable_file(tmp_path):
+def test_open_readonly_returns_readable_file(tmp_path, monkeypatch):
     """open_readonly must open the file and allow reading."""
+    import tokenwise.security as _sec
+    monkeypatch.setattr(_sec, "_ALLOWED_READ_ROOTS", (tmp_path,))
     f = tmp_path / "data.json"
     f.write_text('{"key": "value"}')
     with open_readonly(f) as fh:
@@ -142,21 +144,37 @@ def test_open_readonly_returns_readable_file(tmp_path):
     assert '"key"' in content
 
 
-def test_open_readonly_file_mode_is_r(tmp_path):
+def test_open_readonly_file_mode_is_r(tmp_path, monkeypatch):
     """open_readonly must open in 'r' mode only."""
+    import tokenwise.security as _sec
+    monkeypatch.setattr(_sec, "_ALLOWED_READ_ROOTS", (tmp_path,))
     f = tmp_path / "data.txt"
     f.write_text("hello")
     with open_readonly(f) as fh:
         assert fh.mode == "r"
 
 
-def test_open_readonly_cannot_write(tmp_path):
+def test_open_readonly_cannot_write(tmp_path, monkeypatch):
     """The file handle from open_readonly must not be writable."""
+    import tokenwise.security as _sec
+    monkeypatch.setattr(_sec, "_ALLOWED_READ_ROOTS", (tmp_path,))
     f = tmp_path / "data.txt"
     f.write_text("original")
     with open_readonly(f) as fh:
         with pytest.raises((OSError, io.UnsupportedOperation)):
             fh.write("overwrite")  # type: ignore[attr-defined]
+
+
+def test_open_readonly_rejects_path_outside_allowed_roots(tmp_path, monkeypatch):
+    """open_readonly must refuse paths not inside any allowed read root."""
+    import tokenwise.security as _sec
+    allowed = tmp_path / "allowed"
+    allowed.mkdir()
+    monkeypatch.setattr(_sec, "_ALLOWED_READ_ROOTS", (allowed,))
+    outside = tmp_path / "secret.txt"
+    outside.write_text("classified")
+    with pytest.raises(ValueError, match="outside the allowed"):
+        open_readonly(outside)
 
 
 # ---------------------------------------------------------------------------

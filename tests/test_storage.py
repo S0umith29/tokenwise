@@ -17,6 +17,7 @@ def fake_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "CACHE_DIR", cache_dir)
     monkeypatch.setattr(storage, "CACHE_FILE", cache_file)
     monkeypatch.setattr(_sec, "_ALLOWED_WRITE_ROOTS", (cache_dir,))
+    monkeypatch.setattr(_sec, "_ALLOWED_READ_ROOTS", (cache_dir,))
     return cache_dir, cache_file
 
 

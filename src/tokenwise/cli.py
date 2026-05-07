@@ -6,6 +6,7 @@ from datetime import date, timedelta
 
 import click
 from rich.console import Console
+from rich.markup import escape
 
 from .analyzer import AnalysisResult, analyze, filter_by_date_range, top_wasteful_sessions
 from .dashboard import (
@@ -83,8 +84,8 @@ def project(name: str) -> None:
     }
 
     if not matches:
-        _err.print(f"[red]No project matching '{name}' found.[/red]")
-        available = ", ".join(s.project_name for s in result.by_project.values())
+        _err.print(f"[red]No project matching '{escape(name)}' found.[/red]")
+        available = ", ".join(escape(s.project_name) for s in result.by_project.values())
         _err.print(f"Available: {available}")
         sys.exit(1)
 
@@ -96,7 +97,7 @@ def project(name: str) -> None:
         from rich.table import Table
 
         table = Table(
-            title=f"[bold]{stats.project_name}[/bold] — {len(sessions)} sessions",
+            title=f"[bold]{escape(stats.project_name)}[/bold] — {len(sessions)} sessions",
             box=box.SIMPLE_HEAD,
             header_style="bold cyan",
         )
@@ -112,7 +113,7 @@ def project(name: str) -> None:
 
         for s in sessions[:20]:
             date_str = s.start_time.strftime("%Y-%m-%d %H:%M") if s.start_time else "—"
-            model_short = s.model.replace("claude-", "").replace("-20", " '")
+            model_short = escape(s.model.replace("claude-", "").replace("-20", " '"))
             table.add_row(
                 date_str,
                 model_short,
@@ -201,7 +202,7 @@ def export(as_csv: bool) -> None:
         for s in sessions[:50]:
             table.add_row(
                 str(s.start_time.date()) if s.start_time else "—",
-                s.project_name,
+                escape(s.project_name),
                 _fmt_tokens(s.total_tokens),
                 _fmt_cost(s.cost_usd),
             )
