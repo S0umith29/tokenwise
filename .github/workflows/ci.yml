@@ -83,9 +83,9 @@ jobs:
         run: bandit -r src/ -c pyproject.toml
 
       - name: pip-audit (vulnerability scan)
-        # CVE-2026-3219 affects pip itself with no available fix version.
-        # It is not a dependency of tokenwise (runtime or dev).
-        run: pip-audit --ignore-vuln CVE-2026-3219
+        # CVE-2026-3219 and CVE-2026-6357 affect pip itself; not a tokenwise dependency.
+        # --skip-editable excludes the local tokenwise-cli package (not on PyPI).
+        run: pip-audit --skip-editable --ignore-vuln CVE-2026-3219 --ignore-vuln CVE-2026-6357
 
       - name: Grep check — no network imports
         run: |
